@@ -1,0 +1,1 @@
+export const providerKey: string = process.env.PROVIDER_KEY ?? 'NiceKeyFriend';
