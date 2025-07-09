@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { ProposalJson } from './shared/jsons/proposal';
 import { TrucksJson } from './shared/jsons/trucks';
 import { providerKey } from './shared/constants/environment.const';
@@ -10,6 +10,8 @@ import { AvailableTrucksInterface, RoutesWithTrucksInterface } from './shared/in
 
 @Injectable()
 export class AppService {
+  private logger: Logger = new Logger();
+
   async getRoute(): Promise<{ message: string; routes: RoutesWithTrucksInterface[]; }> {
     try {
       const options: NodeGeocoder.GoogleOptions = {
@@ -76,7 +78,8 @@ export class AppService {
         routes: routesWithTrucks,
       };
     } catch (error) {
-      throw new InternalServerErrorException('Ocorreu um problema ao criar gerar rotas.');
+      this.logger.error(error);
+      throw new InternalServerErrorException('Ocorreu um problema ao gerar rotas.');
     }
   }
 }
