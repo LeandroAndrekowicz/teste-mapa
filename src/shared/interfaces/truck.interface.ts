@@ -1,5 +1,11 @@
 import { AddressInterface } from './proposal.interface';
 
+export interface TrucksInterface {
+    truck: string;
+    cubage: number;
+    plate: string;
+}
+
 export interface AvailableTrucksInterface {
   truck: string;
   cubage: number;

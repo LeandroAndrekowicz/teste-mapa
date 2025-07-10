@@ -1,4 +1,6 @@
-export const TrucksJson = [
+import { TrucksInterface } from "../interfaces/truck.interface";
+
+export const TrucksJson: TrucksInterface[] = [
   {
     truck: 'Caminhao foda',
     cubage: 20,

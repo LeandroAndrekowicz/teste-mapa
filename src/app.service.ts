@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { ProposalJson } from './shared/jsons/proposal';
 import { TrucksJson } from './shared/jsons/trucks';
-import { providerKey } from './shared/constants/environment.const';
+import { initialLat, initialLong, providerKey } from './shared/constants/environment.const';
 import { kmeans } from 'ml-kmeans';
 import * as NodeGeocoder from 'node-geocoder';
 import { ProposalWithGeoInterface } from './shared/interfaces/proposal.interface';
@@ -36,7 +36,7 @@ export class AppService {
       );
 
       const coordinates: number[][] = proposalsWithGeo.map((p) => [p.lat, p.long]);
-      const kmeansResult: KMeansResult = kmeans(coordinates, 3, {});
+      const kmeansResult: KMeansResult = kmeans(coordinates, 3, { initialization: 'mostDistant' });
 
       type ProposalWithGeo = (typeof proposalsWithGeo)[number];
       const groupedRoutes: ProposalWithGeo[][] = [[], [], []];
@@ -60,6 +60,10 @@ export class AppService {
         return {
           truck: suitableTruck,
           totalCubage, 
+          startingPoint: {
+              lat: initialLat,
+              long: initialLong,
+          },
           deliveries: route.map((proposal) => ({
             identifier: `${proposal.simpCode} ${proposal.proposal}`,
             clientName: proposal.clientName,
